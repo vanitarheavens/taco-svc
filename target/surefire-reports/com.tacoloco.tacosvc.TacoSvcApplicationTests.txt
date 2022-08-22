@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: com.tacoloco.tacosvc.TacoSvcApplicationTests
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 13.907 s - in com.tacoloco.tacosvc.TacoSvcApplicationTests
