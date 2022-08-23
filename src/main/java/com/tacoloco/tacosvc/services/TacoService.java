@@ -2,6 +2,7 @@ package com.tacoloco.tacosvc.services;
 
 import com.tacoloco.tacosvc.entities.Taco;
 import com.tacoloco.tacosvc.exception.CustomerNotFoundException;
+import com.tacoloco.tacosvc.exception.NotValidInputException;
 import com.tacoloco.tacosvc.exception.TacoNotFoundException;
 import com.tacoloco.tacosvc.repositories.TacoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +37,9 @@ public class TacoService implements ITacoService {
      */
     @Override
     public Taco createTaco(Taco taco) {
+        if(taco.getPrice() < 0.0) {
+            throw new NotValidInputException("Price for Taco is less than 0");
+        }
         return tacoRepository.save(taco);
     }
 
@@ -51,6 +55,9 @@ public class TacoService implements ITacoService {
         Optional<Taco> tacoOptional = tacoRepository.findById(id);
         if(tacoOptional.isEmpty()) {
             throw new TacoNotFoundException("Taco with id " + id + " not found");
+        }
+        if(taco.getPrice() < 0.0) {
+            throw new NotValidInputException("Price for Taco is less than 0");
         }
         Taco existingTaco = tacoOptional.get();
         existingTaco.setName(taco.getName());

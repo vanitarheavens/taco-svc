@@ -4,9 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.*;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -17,6 +15,6 @@ public class TacoAndQtyRequestDTO {
     private Long tacoId;
 
     @NotNull(message = "The quantity of a particular type Tacos should be specified on an order")
-    @Min(1)
-    private Integer quantity;
+    @Positive(message = "The quantity should be greater than zero")
+    private int quantity;
 }
