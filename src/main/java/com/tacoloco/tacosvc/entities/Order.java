@@ -1,17 +1,13 @@
 package com.tacoloco.tacosvc.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @NoArgsConstructor
@@ -31,11 +27,11 @@ public class Order {
     @ElementCollection
     private List<Long> tacoList = new ArrayList<>();
 
-    @Column(name = "create_ts")
-    private LocalDate createTs;
+    @Column(name = "create_date")
+    private LocalDate createDate;
 
-    @Column(name = "last_updated_ts")
-    private LocalDate lastUpdatedTs;
+    @Column(name = "last_updated_date")
+    private LocalDate lastUpdatedDate;
 
     private double orderTotal;
 
