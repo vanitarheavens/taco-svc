@@ -21,6 +21,11 @@ public class CustomerController {
     @Autowired
     private ICustomerService customerService;
 
+    /**
+     * GET all customers
+     *
+     * @return List<Customer>
+     */
     @GetMapping
     public ResponseEntity<List<Customer>> getAllCustomers() {
         log.info("calling customerService.getAllCustomers");
@@ -28,6 +33,12 @@ public class CustomerController {
         return new ResponseEntity<>(customers, HttpStatus.OK);
     }
 
+    /**
+     * GET customer by Id
+     *
+     * @param customerId Long Id of the customer whose details we want to get
+     * @return Customer details
+     */
     @GetMapping("/{customerId}")
     public ResponseEntity<Customer> getCustomerById(
             @PathVariable Long customerId
@@ -37,6 +48,12 @@ public class CustomerController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    /**
+     * POST or create a new customer
+     *
+     * @param customerDetails Customer
+     * @return Customer with saved details
+     */
     @PostMapping
     public ResponseEntity<Customer> createCustomer(
             @Valid @RequestBody Customer customerDetails) {

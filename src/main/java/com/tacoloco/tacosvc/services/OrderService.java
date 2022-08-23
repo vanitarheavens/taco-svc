@@ -35,14 +35,14 @@ public class OrderService implements IOrderService {
     @Autowired
     private TacoRepository tacoRepository;
 
+    /**
+     * Method to get all Orders in customer_orders table
+     *
+     * @return List<Order> list of order
+     */
     @Override
     public List<Order> getAllOrders() {
         return orderRepository.findAll();
-    }
-
-    @Override
-    public List<Order> getOrdersByCustomerId(Long customerId) {
-        return null;
     }
 
     @Override
@@ -50,32 +50,54 @@ public class OrderService implements IOrderService {
         return orderRepository.findById(id);
     }
 
+    /**
+     * Method to create and save an order for a customer from OrderRequestDTO
+     *
+     * @param customerId Long Id of customer who placed the order
+     * @param orderRequestDTO OrderRequestDTO the details of the order
+     * @return OrderResponseDTO object which has a few of details of the order
+     */
     @Override
     public OrderResponseDTO createCustomerOrder(Long customerId, OrderRequestDTO orderRequestDTO) {
         // set order properties
-        // customer, tacoList, createTs, lastUpdatedTs,
+        // customer, tacoList, createDate, lastUpdatedDate, orderTotal,
         Order order = new Order();
 
         Optional<Customer> customerOptional =
                 customerRepository.findById(customerId);
         if (customerOptional.isPresent()) {
+            // set customer property
             Customer customer = customerOptional.get();
             order.setCustomer(customer);
         } else {
             throw new CustomerNotFoundException("Customer with id " + customerId + " not found");
         }
 
+        // set tacoList property
         List<Taco> tacos = extractTacosFromOrderRequestDTO(orderRequestDTO);
         List<Long> ids = tacos.stream().map(Taco::getId).collect(Collectors.toList());
         order.setTacoList(ids);
+
+        // set createDate and  lastUpdatedDate properties
         order.setCreateDate(LocalDate.now());
         order.setLastUpdatedDate(LocalDate.now());
+
+        // set orderTotal property
         order.setOrderTotal(calculateTotalPrice(tacos));
 
         Order savedOrder = orderRepository.save(order);
         return buildOrderResponseDTOFromOrder(savedOrder);
     }
 
+    /**
+     * Method to extract individual Tacos from the OrderRequestDTO
+     * Iterates through each TacoAndQtyRequestDTO and adds Taco items to tacoList depending
+     * on the quantity specified. If orderRequestDTO has tacoId =1 and quantity = 4,
+     * the Taco with ID 1 will be added to the List 4 times.
+     *
+     * @param orderRequestDTO OrderRequestDTO which is request body from the client
+     * @return List<Taco> list of tacos ie menu items on the order
+     */
     private List<Taco> extractTacosFromOrderRequestDTO(OrderRequestDTO orderRequestDTO) {
         List<Taco> tacos = new ArrayList<>();
         for (TacoAndQtyRequestDTO tacoRequestDTO: orderRequestDTO.getOrderItems()) {
@@ -93,8 +115,15 @@ public class OrderService implements IOrderService {
         return tacos;
     }
 
+    /**
+     * Method to calculate the total price of the Order from the menu items (Tacos)
+     * If number of Tacos is eqaul to or greater than 4, a 20% discount is applied
+     *
+     * @param tacos List<Taco> list of Tacos which are on the Order request
+     * @return double the total cost of all menu items on the order
+     */
     private double calculateTotalPrice(List<Taco> tacos) {
-        double orderTotal = 0;
+        double orderTotal;
         orderTotal = tacos.stream().map(Taco::getPrice).reduce(Double::sum).get();
         if(tacos.size() >= 4) {
             orderTotal = orderTotal - (orderTotal * 0.2);
@@ -103,6 +132,12 @@ public class OrderService implements IOrderService {
         return orderTotal;
     }
 
+    /**
+     * Method to build an OrderResponseDTO from Order object
+     *
+     * @param order Order order
+     * @return OrderResponseDTO object which has minimal data from Order
+     */
     private OrderResponseDTO buildOrderResponseDTOFromOrder(Order order) {
         log.info("Building OrderResponseDTO from order: {}", order);
         OrderResponseDTO orderResponseDTO = new OrderResponseDTO();

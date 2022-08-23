@@ -26,11 +26,26 @@ public class TacoService implements ITacoService {
         return tacoRepository.findById(id);
     }
 
+    /**
+     * Method to persist Taco details in the database.
+     * The assumption is that the manager will time to time add new menu items that
+     * customers can order
+     *
+     * @param taco Taco details
+     * @return Taco saved in the database
+     */
     @Override
     public Taco createTaco(Taco taco) {
         return tacoRepository.save(taco);
     }
 
+    /**
+     * Method to update details of a Taco ie menu item
+     *
+     * @param id Long Id of the Taco to update
+     * @param taco Taco object with new details
+     * @return Taco updated
+     */
     @Override
     public Taco updateTaco(Long id, Taco taco) {
         Optional<Taco> tacoOptional = tacoRepository.findById(id);
