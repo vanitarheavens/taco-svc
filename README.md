@@ -7,14 +7,15 @@ items and quantities ordered, and respond with the order total among other field
 ### Main features
 1. Customer can create customer profile
 2. Taco Loco admin can create different Taco menu items
-3. A customer can place and order and get response with order price total
+3. A customer can place an order and get response with order price total
 
 ### Requirements
 1. Java 11
-2. Spring Boot 2.6.3
+2. Spring Boot 2.7.3
 3. Maven 3.6.3
 4. MySQL Workbench
-5. Postman collections
+5. Hibernate ORM
+6. Postman collections
 
 ## Taco Svc user guide
 
@@ -39,7 +40,10 @@ Open the `TacoSvcApplication` class and run the application
 
 ### Endpoints
 
-Create customer: `POST http://localhost:8082/customers`
+Using Postman, make the following API calls
+
+#### Create customer
+Endpoint: `POST http://localhost:8082/customers`
 
 Request body
 
@@ -50,7 +54,8 @@ Request body
 }
 ```
 
-Create Taco item: `POST http://localhost:8082/tacos`
+#### Create Taco item
+Endpoint: `POST http://localhost:8082/tacos`
 
 Request body:
 ```
@@ -61,7 +66,8 @@ Request body:
 ```
 
 
-Create an order from menu items and quantities: `POST http://localhost:8082/orders/1`
+#### Create an order from menu items and quantities
+Endpoint: `POST http://localhost:8082/orders/1`
 
 Path variable: Long
 

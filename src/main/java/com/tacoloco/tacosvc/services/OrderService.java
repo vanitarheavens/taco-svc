@@ -7,6 +7,7 @@ import com.tacoloco.tacosvc.entities.Customer;
 import com.tacoloco.tacosvc.entities.Order;
 import com.tacoloco.tacosvc.entities.Taco;
 import com.tacoloco.tacosvc.exception.CustomerNotFoundException;
+import com.tacoloco.tacosvc.exception.NotValidInputException;
 import com.tacoloco.tacosvc.exception.OrderNotFoundException;
 import com.tacoloco.tacosvc.exception.TacoNotFoundException;
 import com.tacoloco.tacosvc.repositories.CustomerRepository;
@@ -102,6 +103,10 @@ public class OrderService implements IOrderService {
         List<Taco> tacos = new ArrayList<>();
         for (TacoAndQtyRequestDTO tacoRequestDTO: orderRequestDTO.getOrderItems()) {
             Optional<Taco> tacoOptional = tacoRepository.findById(tacoRequestDTO.getTacoId());
+            int quantity = tacoRequestDTO.getQuantity();
+            if(quantity <  1) {
+                throw new NotValidInputException("Quantity for Taco is less than 1");
+            }
             if (tacoOptional.isPresent()) {
                 Taco taco = tacoOptional.get();
                 for(int i = 1; i <= tacoRequestDTO.getQuantity(); i++) {
@@ -123,7 +128,10 @@ public class OrderService implements IOrderService {
      * @return double the total cost of all menu items on the order
      */
     private double calculateTotalPrice(List<Taco> tacos) {
-        double orderTotal;
+        double orderTotal = 0.0;
+        if(tacos.size() == 0)
+            return orderTotal;
+
         orderTotal = tacos.stream().map(Taco::getPrice).reduce(Double::sum).get();
         if(tacos.size() >= 4) {
             orderTotal = orderTotal - (orderTotal * 0.2);

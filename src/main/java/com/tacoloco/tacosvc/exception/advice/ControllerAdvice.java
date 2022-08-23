@@ -1,6 +1,7 @@
 package com.tacoloco.tacosvc.exception.advice;
 
 import com.tacoloco.tacosvc.exception.CustomerNotFoundException;
+import com.tacoloco.tacosvc.exception.NotValidInputException;
 import com.tacoloco.tacosvc.exception.OrderNotFoundException;
 import com.tacoloco.tacosvc.exception.TacoNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -50,5 +51,19 @@ public class ControllerAdvice {
     public static ResponseEntity<String> handleOrderNotFoundException(HttpServletRequest request, OrderNotFoundException e) {
         String error = "Request failed due to OrderNotFoundException: " + e.getMessage() + " for URI " + request.getRequestURL();
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+    }
+
+    /**
+     * Handler for NotValidInputException
+     * This is used to handle edge cases when input is invalid
+     *
+     * @param request HttpServletRequest
+     * @param e NotValidInputException
+     * @return ResponseEntity<String> with error message and status 404
+     */
+    @ExceptionHandler({ NotValidInputException.class })
+    public static ResponseEntity<String> handleNotValidInputException(HttpServletRequest request, NotValidInputException e) {
+        String error = "Request failed due to NotValidInputException: " + e.getMessage() + " for URI " + request.getRequestURL();
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 }
