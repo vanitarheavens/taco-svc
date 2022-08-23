@@ -18,5 +18,5 @@ public class TacoAndQtyRequestDTO {
 
     @NotNull(message = "The quantity of a particular type Tacos should be specified on an order")
     @Min(1)
-    private Long quantity;
+    private Integer quantity;
 }

@@ -12,6 +12,7 @@ import com.tacoloco.tacosvc.exception.TacoNotFoundException;
 import com.tacoloco.tacosvc.repositories.CustomerRepository;
 import com.tacoloco.tacosvc.repositories.OrderRepository;
 import com.tacoloco.tacosvc.repositories.TacoRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +23,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j(topic ="OrderService")
 public class OrderService implements IOrderService {
 
     @Autowired
@@ -64,9 +66,10 @@ public class OrderService implements IOrderService {
         }
 
         List<Taco> tacos = extractTacosFromOrderRequestDTO(orderRequestDTO);
-        order.setTacoList(tacos.stream().map(Taco::getId).collect(Collectors.toList()));
-        order.setCreateTs(LocalDate.now());
-        order.setLastUpdatedTs(LocalDate.now());
+        List<Long> ids = tacos.stream().map(Taco::getId).collect(Collectors.toList());
+        order.setTacoList(ids);
+        order.setCreateDate(LocalDate.now());
+        order.setLastUpdatedDate(LocalDate.now());
         order.setOrderTotal(calculateTotalPrice(tacos));
 
         Order savedOrder = orderRepository.save(order);
@@ -86,24 +89,27 @@ public class OrderService implements IOrderService {
                 throw new TacoNotFoundException("Taco with id " + tacoRequestDTO.getTacoId() + " not found");
             }
         }
+        log.info("Successfully extracted Tacos from OrderRequestDTO: {}", orderRequestDTO);
         return tacos;
     }
 
     private double calculateTotalPrice(List<Taco> tacos) {
         double orderTotal = 0;
-        orderTotal= tacos.stream().map(Taco::getPrice).reduce(Double::sum).get();
+        orderTotal = tacos.stream().map(Taco::getPrice).reduce(Double::sum).get();
         if(tacos.size() >= 4) {
             orderTotal = orderTotal - (orderTotal * 0.2);
         }
+        log.info("Completed calculating TotalPrice: {}", orderTotal);
         return orderTotal;
     }
 
     private OrderResponseDTO buildOrderResponseDTOFromOrder(Order order) {
+        log.info("Building OrderResponseDTO from order: {}", order);
         OrderResponseDTO orderResponseDTO = new OrderResponseDTO();
         orderResponseDTO.setCustomerId(order.getCustomer().getId());
         orderResponseDTO.setOrderId(order.getId());
         orderResponseDTO.setOrderTotal(order.getOrderTotal());
-        orderResponseDTO.setOrderDate(order.getCreateTs());
+        orderResponseDTO.setOrderDate(order.getCreateDate());
         return orderResponseDTO;
     }
 
@@ -124,7 +130,7 @@ public class OrderService implements IOrderService {
         Order existingOrder = orderOptional.get();
         List<Taco> tacos = extractTacosFromOrderRequestDTO(orderRequestDTO);
         existingOrder.setTacoList(tacos.stream().map(Taco::getId).collect(Collectors.toList()));
-        existingOrder.setLastUpdatedTs(LocalDate.now());
+        existingOrder.setLastUpdatedDate(LocalDate.now());
         existingOrder.setOrderTotal(calculateTotalPrice(tacos));
 
         Order updatedOrder = orderRepository.save(existingOrder);

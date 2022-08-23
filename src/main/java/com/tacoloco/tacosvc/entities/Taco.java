@@ -14,7 +14,6 @@ import javax.validation.constraints.PositiveOrZero;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-@EqualsAndHashCode
 public class Taco {
 
     @Id
@@ -26,7 +25,7 @@ public class Taco {
     private String name;
 
     @NotNull(message = "Taco price is required")
-    @PositiveOrZero
+    @PositiveOrZero(message = "Taco price should be zero or greater")
     private double price;
 
 }

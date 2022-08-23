@@ -3,6 +3,7 @@ package com.tacoloco.tacosvc.controller;
 import com.tacoloco.tacosvc.entities.Customer;
 import com.tacoloco.tacosvc.entities.Order;
 import com.tacoloco.tacosvc.services.ICustomerService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +15,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/customers")
+@Slf4j(topic ="CustomerController")
 public class CustomerController {
 
     @Autowired
@@ -21,6 +23,7 @@ public class CustomerController {
 
     @GetMapping
     public ResponseEntity<List<Customer>> getAllCustomers() {
+        log.info("calling customerService.getAllCustomers");
         List<Customer> customers =  customerService.getAllCustomers();
         return new ResponseEntity<>(customers, HttpStatus.OK);
     }
