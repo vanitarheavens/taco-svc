@@ -1,6 +1,5 @@
 com/tacoloco/tacosvc/repositories/CustomerRepository.class
 com/tacoloco/tacosvc/repositories/OrderRepository.class
-com/tacoloco/tacosvc/dtos/request/CustomerRequestDTO.class
 com/tacoloco/tacosvc/services/ITacoService.class
 com/tacoloco/tacosvc/entities/Order.class
 com/tacoloco/tacosvc/dtos/response/OrderResponseDTO.class
