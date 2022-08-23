@@ -54,16 +54,9 @@ class OrderServiceTest {
     }
 
     @Test
-    void getAllOrders() {
-    }
-
-    @Test
-    void getOrderById() {
-    }
-
-    @Test
     void createOrder() {
 
+        // mock underlying dependencies
         when(tacoRepository.findById(1L))
                 .thenReturn(Optional.of(tacos.get(0)));
         when(tacoRepository.findById(2L))
@@ -90,6 +83,8 @@ class OrderServiceTest {
         orderRequestDTO.setOrderItems(orderItems);
 
         when(orderRepository.save(order)).thenReturn(order);
+
+        // Assert response is as expected
         OrderResponseDTO response = orderService.createCustomerOrder(1L, orderRequestDTO);
         assertNotNull(response);
         double calculatedOrderTotal = ((2 * 2.5) + (2 * 3.0)) - (((2 * 2.5) + (2 * 3.0)) * 0.2);

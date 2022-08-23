@@ -47,7 +47,8 @@ class OrderControllerTest {
     Gson gson;
 
     @Test
-    public void testAddNewMember() throws Exception {
+    public void testCreateNewOrder() throws Exception {
+        // create orderRequestDTO
         OrderRequestDTO orderRequestDTO = new OrderRequestDTO();
         TacoAndQtyRequestDTO menu1 = new TacoAndQtyRequestDTO();
         menu1.setTacoId(1L);
@@ -55,6 +56,7 @@ class OrderControllerTest {
         List<TacoAndQtyRequestDTO> orderItems = List.of(menu1);
         orderRequestDTO.setOrderItems(orderItems);
 
+        // create mock OrderResponseDTO
         OrderResponseDTO orderResponseDTO = new OrderResponseDTO();
         orderResponseDTO.setCustomerId(1L);
         orderResponseDTO.setOrderId(4L);
