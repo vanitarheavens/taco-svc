@@ -10,7 +10,6 @@ import java.util.Optional;
 public interface IOrderService {
 
     List<Order> getAllOrders();
-    List<Order> getOrdersByCustomerId(Long customerId);
     Optional<Order> getOrderById(Long id);
     OrderResponseDTO createCustomerOrder(Long customerId, OrderRequestDTO orderRequest);
     OrderResponseDTO updateOrder(Long customerId, Long orderId, OrderRequestDTO orderRequestDTO);

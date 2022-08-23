@@ -19,12 +19,23 @@ public class TacoController {
     @Autowired
     private ITacoService tacoService;
 
+    /**
+     * GET all menu items that are in the system
+     *
+     * @return List<Taco> menu items
+     */
     @GetMapping
     public ResponseEntity<List<Taco>> getAllTacos() {
         List<Taco> tacos =  tacoService.getAllTacos();
         return new ResponseEntity<>(tacos, HttpStatus.OK);
     }
 
+    /**
+     * GET details of a single menu item
+     *
+     * @param tacoId Long Id of the menu item we want to retrieve
+     * @return Taco
+     */
     @GetMapping("/{tacoId}")
     public ResponseEntity<Taco> getTacoById(
             @PathVariable Long tacoId
@@ -34,6 +45,12 @@ public class TacoController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    /**
+     * POST or create a new menu item
+     *
+     * @param tacoDetails Taco
+     * @return Taco
+     */
     @PostMapping
     public ResponseEntity<Taco> createTaco(
             @Valid @RequestBody Taco tacoDetails) {

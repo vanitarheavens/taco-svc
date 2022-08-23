@@ -25,11 +25,23 @@ public class CustomerService implements ICustomerService {
         return customerRepository.findById(id);
     }
 
+    /**
+     * Method to persist a Customer in the database
+     * @param customer Customer the customer details
+     * @return Customer updated object
+     */
     @Override
     public Customer createCustomer(Customer customer) {
         return customerRepository.save(customer);
     }
 
+    /**
+     * Method to update the customer info
+     *
+     * @param id Long Id of the custmer to update
+     * @param customer Customer the new customer details
+     * @return Customer updated object
+     */
     @Override
     public Customer updateCustomer(Long id, Customer customer) {
         Optional<Customer> customerOptional = customerRepository.findById(id);

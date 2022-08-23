@@ -23,12 +23,23 @@ public class OrderController {
     @Autowired
     private IOrderService orderService;
 
+    /**
+     * GET all the existing orders
+     *
+     * @return List<Order> orders
+     */
     @GetMapping
     public ResponseEntity<List<Order>> getAllOrders() {
         List<Order> orders =  orderService.getAllOrders();
         return new ResponseEntity<>(orders, HttpStatus.OK);
     }
 
+    /**
+     * GET details of single order
+     *
+     * @param orderId Long Id of the order that we want to retrieve
+     * @return Order details
+     */
     @GetMapping("/{orderId}")
     public ResponseEntity<Order> getOrderById(
             @PathVariable Long orderId
@@ -39,6 +50,13 @@ public class OrderController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    /**
+     * POST or create an order for a customer
+     *
+     * @param customerId Long Id of customer who is making the order
+     * @param orderRequestDTO OrderRequestDTO order details
+     * @return OrderResponseDTO response with orderTotal and other order details
+     */
     @PostMapping("/{customerId}")
     public ResponseEntity<OrderResponseDTO> createCustomerOrder(
             @PathVariable Long customerId,
@@ -49,6 +67,14 @@ public class OrderController {
         return new ResponseEntity<>(orderResponseDTO, HttpStatus.CREATED);
     }
 
+    /**
+     * Update details of an order
+     *
+     * @param customerId Long Id of customer who made the order
+     * @param orderId Long Id of the existing order to update
+     * @param orderRequestDTO OrderRequestDTO new details of the order
+     * @return OrderResponseDTO
+     */
     @PutMapping("/{customerId}/customer-orders/{orderId}")
     public ResponseEntity<OrderResponseDTO> updateCustomerOrder(
             @PathVariable Long customerId,
